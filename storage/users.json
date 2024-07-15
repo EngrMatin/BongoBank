@@ -1,0 +1,66 @@
+[
+    {
+        "name": "System Admin",
+        "mobile": "01715529212",
+        "email": "system_admin@gmail.com",
+        "password": "$2y$10$umRcFG9NUu7wCMnoe1BSdetV1RCDkyc0.13fchlh530DsPwaHG5DC",
+        "type": "admin"
+    },
+    {
+        "name": "Imran Khan",
+        "mobile": "01556112233",
+        "email": "imran@gmail.com",
+        "password": "$2y$10$mpuTgV2B6WVrsFLcvgTPmuqz0zhC2RlROV1T1tsetcMljeu0cAOuO",
+        "type": "customer",
+        "created_at": "2024-06-12 09:48:30",
+        "balance": 50000
+    },
+    {
+        "name": "Mushfikur Rahman",
+        "mobile": "01615887788",
+        "email": "musfik@gmail.com",
+        "password": "$2y$10$6fJuLt3H6MRZESsHiJCegeLuVwL9MlaA0LEU7jrztJTAJHzJipKgi",
+        "type": "customer",
+        "created_at": "2024-06-15 10:16:06",
+        "balance": 235000
+    },
+    {
+        "name": "Senior Admin",
+        "mobile": "01778667788",
+        "email": "senior_admin@gmail.com",
+        "password": "$2y$10$BuPhM7C9IbLQgA58LrgmVeYdEI5CqIFM7klZ8Ln7qg3BzznmBVu7u",
+        "type": "admin"
+    },
+    {
+        "name": "Executive Admin",
+        "mobile": "01755888666",
+        "email": "executive_admin@gmail.com",
+        "password": "$2y$10$tIxKio37FrhxVi.Moz1p3e2H2hKgE03p91BkeJKimiGQrKWWpSNli",
+        "type": "admin"
+    },
+    {
+        "name": "Assistant Admin",
+        "mobile": "01711123456",
+        "email": "assistant_admin@gmail.com",
+        "password": "$2y$10$FxKYPdeAILoQ88KOOZvy6eJFM3NqpSGmhkLDhJhrAEMz1hKvkx9gO",
+        "type": "admin"
+    },
+    {
+        "name": "Krisno Doyal Roy",
+        "mobile": "01625665566",
+        "email": "kdroy@gmail.com",
+        "password": "$2y$10$8TQPSH.nvJjvDJKZrMM5u.APnzU4HgY.Q1YWAZYH4SsCkNkDUe66i",
+        "type": "customer",
+        "created_at": "2024-07-15 10:31:15",
+        "balance": 157367
+    },
+    {
+        "name": "Sakib Hasan",
+        "mobile": "01611558866",
+        "email": "sakib@gmail.com",
+        "password": "$2y$10$iDX\/JeTNU1sZT1\/IxtnF2.rd6YZmwov9LPrYkm4w5WQAhgJRbUPeW",
+        "type": "customer",
+        "created_at": "2024-07-15 10:32:32",
+        "balance": 135633
+    }
+]
