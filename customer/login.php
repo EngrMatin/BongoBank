@@ -3,28 +3,54 @@ session_start();
 require '../vendor/autoload.php';
 
 use BongoBank\Customer;
+use BongoBank\Database;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') 
 {
-    $email = $_POST['email'];
+    $email    = $_POST['email'];
     $password = $_POST['password'];
-
-    $usersFile = '../storage/users.json';
-    $users = json_decode(file_get_contents($usersFile), true);
-    foreach ($users as $user) 
+    
+    $config   = include '../config.php';
+    
+    if ($config['storage'] === 'file') 
     {
-        if ($user['email'] === $email && password_verify($password, $user['password']) && $user['type'] === 'customer') 
+        $usersFile = $config['file']['users'];
+        $users     = json_decode(file_get_contents($usersFile), true);
+        foreach ($users as $user) 
         {
-            $_SESSION['user'] = $user;
-            header('Location: ./dashboard.php');
+            if ($user['email'] === $email && password_verify($password, $user['password']) && $user['type'] === 'customer') 
+            {
+                $_SESSION['user'] = $user;
+                header('Location: ./dashboard.php');
+                exit;
+            }
+        }
+    } 
+    elseif ($config['storage'] === 'database') 
+    {
+        $dbConfig = $config['database'];
+        $db = Database::getInstance($dbConfig)->getConnection();
+
+        $query = "SELECT * FROM customers WHERE email = :email";
+        $stmt = $db->prepare($query);
+        $stmt->execute([':email' => $email]);
+        $customer = $stmt->fetch();
+        
+        if ($customer && password_verify($password, $customer['password']))
+        {  
+            $_SESSION['customer'] = $customer;
+            header('Location: dashboard.php');
             exit;
         }
+    } 
+    else 
+    {
+        throw new \Exception("Invalid storage option.");
     }
+
     echo "Invalid email or password";
 }
-
 ?>
-
 
 
 <!DOCTYPE html>
@@ -79,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
 
             <div>
               <button type="submit"
-                class="flex w-full justify-center rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600">
+                      class="flex w-full justify-center rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600">
                 Sign in
               </button>
             </div>

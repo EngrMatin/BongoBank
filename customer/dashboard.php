@@ -1,11 +1,14 @@
 <?php
 session_start();
 require '../vendor/autoload.php';
+$config = include '../config.php';
 
+use BongoBank\Database;
 use BongoBank\Customer;
 use BongoBank\Transaction;
 
-if (!isset($_SESSION['user']) || $_SESSION['user']['type'] !== 'customer') 
+//if (!isset($_SESSION['customer']) || $_SESSION['customer']['type'] !== 'customer') 
+if (!isset($_SESSION['customer'])) 
 {
     header('Location: ./login.php');
     exit;
@@ -29,7 +32,7 @@ function getInitials($name)
   return $initials;
 }
 
-$current_customer = $_SESSION['user'];
+$current_customer = $_SESSION['customer'];
 $customer = Customer::findCustomerByEmail($current_customer['email']);
 $transactions = Transaction::getTransactionsByEmail($current_customer['email']);
 ?>

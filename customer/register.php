@@ -1,7 +1,9 @@
 <?php
 
 require '../vendor/autoload.php';
+$config = include '../config.php';
 
+use BongoBank\Database;
 use BongoBank\Customer;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') 
