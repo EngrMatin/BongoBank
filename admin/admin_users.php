@@ -4,6 +4,7 @@ session_start();
 require '../vendor/autoload.php';
 
 use BongoBank\Admin;
+use BongoBank\Database;
 
 // Check if the user is logged in and is the system admin
 if (!isset($_SESSION['user']) || $_SESSION['user']['type'] !== 'admin' || $_SESSION['user']['email'] !== 'system_admin@gmail.com') 
@@ -32,10 +33,30 @@ function getInitials($name)
   return $initials;
 }
 
-$users = json_decode(file_get_contents('../storage/users.json'), true);
-$adminUsers = array_filter($users, function ($user) {
-    return $user['type'] === 'admin';
-});
+
+$config = include '../config.php';
+
+if ($config['storage'] === 'file') 
+{
+    $users = json_decode(file_get_contents('../storage/users.json'), true);
+    $adminUsers = array_filter($users, function ($user) {
+        return $user['type'] === 'admin';
+    });
+} 
+elseif ($config['storage'] === 'database') 
+{
+    $dbConfig = $config['database'];
+    $db = Database::getInstance($dbConfig)->getConnection();
+
+    $query = "SELECT * FROM users WHERE type = 'admin'";
+    $stmt = $db->prepare($query);
+    $stmt->execute();
+    $adminUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} 
+else 
+{
+    throw new \Exception("Invalid storage option.");
+}
 
 ?>
 

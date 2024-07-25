@@ -3,26 +3,56 @@ session_start();
 require '../vendor/autoload.php';
 
 use BongoBank\Admin;
+use BongoBank\Database;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') 
 {
-    $email = $_POST['email'];
+    $email    = $_POST['email'];
     $password = $_POST['password'];
 
-    $usersFile = '../storage/users.json';
-    $users = json_decode(file_get_contents($usersFile), true);
-    foreach ($users as $user) 
+    $config   = include '../config.php';
+
+    if ($config['storage'] === 'file') 
     {
-        if ($user['email'] === $email && password_verify($password, $user['password']) && $user['type'] === 'admin') 
+        $usersFile = '../storage/users.json';
+        $users = json_decode(file_get_contents($usersFile), true);
+
+        foreach ($users as $user) 
+        {
+            if ($user['email'] === $email && password_verify($password, $user['password']) && $user['type'] === 'admin') 
+            {
+                $_SESSION['user'] = $user;
+                header('Location: dashboard.php');
+                exit;
+            }
+        }
+    } 
+    elseif ($config['storage'] === 'database') 
+    {
+        $dbConfig = $config['database'];
+        $db = Database::getInstance($dbConfig)->getConnection();
+
+        $query = "SELECT * FROM users WHERE email = :email AND type = 'admin'";
+        $stmt = $db->prepare($query);
+        $stmt->execute([':email' => $email]);
+        $user = $stmt->fetch();
+
+        if ($user && password_verify($password, $user['password'])) 
         {
             $_SESSION['user'] = $user;
             header('Location: dashboard.php');
             exit;
         }
+    } 
+    else 
+    {
+        throw new \Exception("Invalid storage option.");
     }
+
     $error_message = "Invalid email or password";
 }
 ?>
+
 
 <!DOCTYPE html>
 <html class="h-full bg-white" lang="en">
